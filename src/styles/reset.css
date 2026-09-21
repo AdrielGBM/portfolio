@@ -1,0 +1,208 @@
+:root {
+	font-size: 100%;
+	font-family: system-ui, sans-serif;
+	scroll-behavior: smooth;
+}
+
+*,
+*::before,
+*::after {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	border: none;
+}
+
+*::before,
+*::after,
+a {
+	display: block;
+}
+
+body {
+	width: 100%;
+	max-width: 100dvw;
+	min-height: 100dvh;
+	overflow-x: hidden;
+	hyphens: auto;
+	color: inherit;
+}
+
+img,
+figure,
+picture,
+video,
+audio,
+source,
+embed,
+iframe,
+object,
+canvas,
+svg,
+meter,
+progress,
+slot {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	object-fit: cover;
+	object-position: center center;
+}
+
+li,
+menu,
+summary {
+	list-style: none;
+}
+
+ol {
+	counter-reset: revert;
+}
+
+abbr,
+address,
+b,
+bdi,
+bdo,
+cite,
+code,
+data,
+del,
+dfn,
+i,
+em,
+ins,
+kbd,
+mark,
+q,
+rb,
+ruby,
+rp,
+rt,
+rbc,
+rtc,
+s,
+samp,
+small,
+span,
+strong,
+sub,
+sup,
+time,
+u,
+var,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+blockquote,
+dl,
+dt,
+dd,
+details,
+summary,
+pre,
+blockquote,
+caption,
+address,
+legend,
+optgroup,
+option,
+output,
+figcaption {
+	font: inherit;
+	text-decoration: none;
+	text-wrap: pretty;
+	color: inherit;
+
+	a {
+		display: inline;
+	}
+
+	svg {
+		display: inline;
+		width: initial;
+		height: 1em;
+		vertical-align: middle;
+	}
+}
+
+rt,
+sub,
+sup {
+	font-size: 0.75em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+	content: '';
+	content: none;
+}
+
+form,
+input,
+textarea,
+select,
+label {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	font: inherit;
+	hyphens: auto;
+	background-color: transparent;
+	color: inherit;
+}
+
+button {
+	display: block;
+	font: inherit;
+	hyphens: auto;
+	background-color: transparent;
+	color: inherit;
+
+	svg {
+		display: inline;
+		width: initial;
+		height: 1em;
+		vertical-align: middle;
+	}
+}
+
+::placeholder {
+	color: unset;
+}
+
+button,
+label {
+	cursor: pointer;
+}
+
+table,
+thead,
+tbody,
+tfoot,
+th,
+tr,
+td {
+	font: inherit;
+	border-collapse: collapse;
+	border-spacing: 0;
+	overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	* {
+		animation: none !important;
+		transition: none !important;
+	}
+}

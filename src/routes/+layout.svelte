@@ -5,6 +5,8 @@
 	import { locales, localizeHref } from '$lib/paraglide/runtime';
 	import favicon from '$lib/assets/favicon.svg';
 
+	import '../styles/global.css';
+
 	let { children } = $props();
 </script>
 
