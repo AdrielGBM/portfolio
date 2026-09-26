@@ -57,3 +57,6 @@ panic = "abort"
 # The published crate lags Telar's `dev` HEAD, and the app must build against the same code the flake's `cargo-telar` was built from.
 [patch.crates-io]
 telar = { path = "../telar/crates/telar" }
+
+[dev-dependencies]
+telar = { version = "0.2.1", default-features = false, features = ["runtime-catalog"] }

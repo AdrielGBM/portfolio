@@ -1,0 +1,70 @@
+[route.home]
+title = "Adriel Barrientos M. — Software Engineer"
+description = "Portafolio de Adriel Barrientos M., Software Engineer: web full stack en producción, escritorio en Rust y simulación industrial."
+
+[chrome]
+skip_to_content = "Saltar al contenido"
+nav_act1 = "Acto I"
+nav_act2 = "Acto II"
+nav_act3 = "Acto III"
+nav_credits = "Créditos"
+lang_es = "Español"
+lang_en = "English"
+
+[opening]
+name = "Adriel Barrientos M."
+role = "Software Engineer · Castro, Chiloé"
+
+[intertitle1]
+label = "ACTO I · WEB"
+
+[act1]
+beat1 = "producción."
+verb_deploy = "desplegar"
+verb_migrate = "migrar"
+verb_scale = "escalar"
+verb_maintain = "mantener"
+layers = "cliente → API → datos → colas"
+stack = "TypeScript · React · Next.js · Vite · Astro · NestJS · TypeORM · PostgreSQL (Supabase)"
+prose = "Construye aplicaciones web completas: interfaces que responden rápido y APIs que sostienen el tráfico detrás. Diseña, despliega y mantiene cada capa, desde la base de datos hasta la experiencia de quien usa el producto."
+areas_montage = "Finanzas · Transporte · Maratones · Simulación"
+
+[intertitle2]
+label = "ACTO II · ESCRITORIO"
+line1 = "Quería Rust con la fluidez de la web."
+line2 = "Terminé dibujando cada píxel."
+
+[act2]
+heading = "Telar: un framework de interfaces en Rust."
+subheading = "Este sitio está hecho con él."
+facts = "un binario · sin webview · desktop / tui / web / android / headless"
+note = "Esta página corre sobre Telar."
+link_repo = "Repositorio en GitHub"
+
+[act3]
+title = "SIMULACIÓN"
+bio_line1 = "La interfaz de una simulación industrial."
+bio_line2 = "Escritorio y web."
+subtitle = "Aplicación industrial · Tauri · Rust · 3D"
+problem = "Interfaces para monitorear y operar procesos industriales en tiempo real."
+
+[credits]
+about_heading = "Sobre"
+bio_line1 = "Ingeniero en informática. Me importan el rendimiento, el diseño y la robustez."
+bio_line2 = "Prefiero lo abierto. Uso NixOS, así que también configuro mi sistema como si fuera código."
+experience_summary = "Experiencia profesional en desarrollo web full stack, construyendo y manteniendo aplicaciones en producción."
+education_mayor_name = "Universidad Mayor"
+education_mayor_period = "2022 – dic. 2025"
+education_mayor_program = "Ingeniería en Informática"
+education_devf_name = "Dev.F"
+education_devf_period = "ago. 2024 – feb. 2025"
+education_devf_program = "Curso de Front-End"
+stack_heading = "Stack"
+stack = "Rust · Telar · Tauri · TypeScript · React · Next.js · Vite · Astro · NestJS · TypeORM · PostgreSQL (Supabase) · n8n · MCP · Linux / NixOS"
+contact_heading = "Contacto"
+contact_email_label = "Email"
+contact_github_label = "GitHub"
+contact_linkedin_label = "LinkedIn"
+contact_cv_label = "Descargar CV"
+made_with = "Hecho con Telar"
+end_card = "FIN"

@@ -1,3 +1,6 @@
 [telar]
 # "auto" draws with the GPU where there is one and the CPU where there is not.
 backend = "auto"
+
+[telar.i18n]
+default = "es"
