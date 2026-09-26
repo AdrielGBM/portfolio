@@ -1,0 +1,66 @@
+{
+  "nodes": {
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1790046670,
+        "narHash": "sha256-MYiI+CzL0tuWgRPjGsKCDHqYs2T3OzMlMQWOYWG0qso=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "6774f7bc253789b113a4f39285dc0fa100abeacc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nixpkgs": "nixpkgs",
+        "rust-overlay": "rust-overlay",
+        "telar": "telar"
+      }
+    },
+    "rust-overlay": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1790149037,
+        "narHash": "sha256-01WcSplVEmQt13QUZLfWez27JO+2lyYWX+yTitvkF3g=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "fb058ecf6d14837ea152a3d5225ce7f88ee5cde1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "telar": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1790426541,
+        "narHash": "sha256-4UrDSjquTuukFO+WbGFF4NKNrZL9UUY+Lf/uLFTEDds=",
+        "ref": "dev",
+        "rev": "1f13dcbcc643bcc3922d4709a5131b909e0bf957",
+        "revCount": 957,
+        "type": "git",
+        "url": "file:///home/adrielgbm/projects/code/telar"
+      },
+      "original": {
+        "ref": "dev",
+        "type": "git",
+        "url": "file:///home/adrielgbm/projects/code/telar"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

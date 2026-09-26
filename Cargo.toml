@@ -1,0 +1,59 @@
+[package]
+name = "portfolio"
+version = "0.1.0"
+edition = "2024"
+
+# `cdylib` is the library `cargo telar dev` swaps on a hot reload; `lib` is what the binary and the tests link.
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[[bin]]
+name = "portfolio"
+path = "src/main.rs"
+
+[dependencies]
+# `default-features = false` so this file is the only place a target is named: telar's own default is a
+# desktop window, and it would otherwise ride along into a build that asked for the terminal or a browser.
+telar = { version = "0.2.1", default-features = false, features = [
+    "runtime",
+    "components",
+] }
+
+[features]
+# The target this project builds for. Each one is complete on its own — swapping one word here, or
+# passing `--target` (and, for the browser, `--renderer`) on the command line, is the whole of the change.
+default = ["web-dom"]
+desktop = ["telar/desktop"]
+tui = ["telar/tui"]
+web = ["telar/web"]
+web-dom = ["telar/web-dom"]
+android = ["telar/android"]
+# Never turned on by a build: `cargo telar` names these on the command line for its own commands, and this entry is what lets Cargo.lock pin what they bring in.
+tooling = ["telar/dev", "telar/hot-reload", "telar/previews", "telar/preview", "telar/preview-headless"]
+
+[profile.dev]
+opt-level = 1
+debug = "line-tables-only"
+
+# Dependencies compile once and are not what you are stepping through: optimising them buys a renderer and
+# a layout engine that run at a usable speed in dev, and dropping their debug info takes most of the weight
+# out of the cdylib a hot reload rewrites. Your own crates keep theirs, so panics still name a line.
+[profile.dev.package."*"]
+opt-level = 3
+debug = false
+
+# Do not add `panic = "abort"`: Telar unwinds to keep one panicking surface from taking the process with it.
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+strip = "symbols"
+
+[profile.web]
+inherits = "release"
+opt-level = "z"
+panic = "abort"
+
+# The published crate lags Telar's `dev` HEAD, and the app must build against the same code the flake's `cargo-telar` was built from.
+[patch.crates-io]
+telar = { path = "../telar/crates/telar" }
