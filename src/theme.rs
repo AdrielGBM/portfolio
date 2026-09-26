@@ -1,77 +1,183 @@
-use telar::{Color, ThemeTokens, use_theme};
+use std::cell::Cell;
 
-/// The application's design tokens. Every component reads these, so a restyle happens here and nowhere else.
-#[derive(Clone, ThemeTokens)]
+use telar::{
+    Children, Color, ColorScheme, LayoutError, LayoutItem, OwnerId, ScopedTheme, ThemeTokens,
+    detached, dispose_owner, effect, owner_scope, provide_theme, set_theme, use_theme,
+};
+
+use crate::palette::{Contrast, Ramp, Step};
+use crate::scheme::{register_scheme_modes, scheme_now, use_scheme};
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Act {
+    Opening,
+    One,
+    Two,
+    Three,
+    Credits,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct ActSteps {
+    pub ramp: Ramp,
+    pub contrast: Contrast,
+    pub background: Step,
+    pub surface: Step,
+    pub ink: Step,
+    pub ink_muted: Step,
+    pub ink_display: Step,
+    pub accent: Step,
+    pub accent_ink: Step,
+    pub rule: Step,
+}
+
+impl Act {
+    pub const ALL: [Act; 5] = [Act::Opening, Act::One, Act::Two, Act::Three, Act::Credits];
+
+    pub fn steps(self) -> ActSteps {
+        match self {
+            Act::Opening => ActSteps {
+                ramp: Ramp::Neutral,
+                contrast: Contrast::Standard,
+                background: Step::S950,
+                surface: Step::S900,
+                ink: Step::S50,
+                ink_muted: Step::S400,
+                ink_display: Step::S50,
+                accent: Step::S200,
+                accent_ink: Step::S950,
+                rule: Step::S700,
+            },
+            Act::One => ActSteps {
+                ramp: Ramp::Primary,
+                contrast: Contrast::Standard,
+                background: Step::S950,
+                surface: Step::S900,
+                ink: Step::S50,
+                ink_muted: Step::S400,
+                ink_display: Step::S200,
+                accent: Step::S300,
+                accent_ink: Step::S950,
+                rule: Step::S700,
+            },
+            Act::Two => ActSteps {
+                ramp: Ramp::Neutral,
+                contrast: Contrast::High,
+                background: Step::S950,
+                surface: Step::S900,
+                ink: Step::S50,
+                ink_muted: Step::S300,
+                ink_display: Step::S50,
+                accent: Step::S50,
+                accent_ink: Step::S950,
+                rule: Step::S600,
+            },
+            Act::Three => ActSteps {
+                ramp: Ramp::Secondary,
+                contrast: Contrast::Standard,
+                background: Step::S950,
+                surface: Step::S900,
+                ink: Step::S50,
+                ink_muted: Step::S400,
+                ink_display: Step::S200,
+                accent: Step::S300,
+                accent_ink: Step::S950,
+                rule: Step::S700,
+            },
+            Act::Credits => ActSteps {
+                ramp: Ramp::Neutral,
+                contrast: Contrast::Standard,
+                background: Step::S950,
+                surface: Step::S900,
+                ink: Step::S50,
+                ink_muted: Step::S300,
+                ink_display: Step::S100,
+                accent: Step::S200,
+                accent_ink: Step::S950,
+                rule: Step::S700,
+            },
+        }
+    }
+}
+
+#[derive(Clone, Debug, PartialEq, ThemeTokens)]
+#[theme(
+    surface_alt = self.background,
+    scrollbar = self.ink_muted.with_alpha(0.55),
+    highlight_low = self.ink.with_alpha(0.06),
+    highlight_med = self.ink.with_alpha(0.12),
+    highlight_high = self.ink.with_alpha(0.2)
+)]
+#[theme(default(radius, spacing, icon_size, success, warning, error, info))]
 pub struct AppTheme {
-    pub primary: Color,
-    pub on_primary: Color,
+    pub background: Color,
     pub surface: Color,
-    pub surface_alt: Color,
-    pub border: Color,
     pub ink: Color,
-    pub muted: Color,
-    pub scrollbar: Color,
-    pub success: Color,
-    pub warning: Color,
-    pub error: Color,
-    pub info: Color,
-    pub highlight_low: Color,
-    pub highlight_med: Color,
-    pub highlight_high: Color,
-    pub radius: f32,
-    pub spacing: f32,
-    pub icon_size: f32,
+    #[token(muted)]
+    pub ink_muted: Color,
+    pub ink_display: Color,
+    #[token(primary)]
+    pub accent: Color,
+    #[token(on_primary)]
+    pub accent_ink: Color,
+    #[token(border)]
+    pub rule: Color,
 }
 
 impl AppTheme {
-    pub fn light() -> Self {
+    pub fn for_act(act: Act, scheme: ColorScheme) -> Self {
+        let steps = act.steps();
+        let shade = |step| steps.ramp.shade(step, steps.contrast, scheme);
         Self {
-            primary: Color::rgba(0.26, 0.38, 0.93, 1.0),
-            on_primary: Color::WHITE,
-            surface: Color::WHITE,
-            surface_alt: Color::rgba(0.96, 0.97, 0.99, 1.0),
-            border: Color::rgba(0.86, 0.87, 0.93, 1.0),
-            ink: Color::rgba(0.09, 0.10, 0.18, 1.0),
-            muted: Color::rgba(0.46, 0.48, 0.58, 1.0),
-            scrollbar: Color::rgba(0.66, 0.68, 0.76, 1.0),
-            success: Color::rgba(0.18, 0.69, 0.45, 1.0),
-            warning: Color::rgba(0.90, 0.62, 0.16, 1.0),
-            error: Color::rgba(0.86, 0.26, 0.30, 1.0),
-            info: Color::rgba(0.24, 0.55, 0.90, 1.0),
-            highlight_low: Color::rgba(0.0, 0.0, 0.0, 0.04),
-            highlight_med: Color::rgba(0.0, 0.0, 0.0, 0.08),
-            highlight_high: Color::rgba(0.0, 0.0, 0.0, 0.14),
-            radius: 10.0,
-            spacing: 8.0,
-            icon_size: 16.0,
+            background: shade(steps.background),
+            surface: shade(steps.surface),
+            ink: shade(steps.ink),
+            ink_muted: shade(steps.ink_muted),
+            ink_display: shade(steps.ink_display),
+            accent: shade(steps.accent),
+            accent_ink: shade(steps.accent_ink),
+            rule: shade(steps.rule),
         }
     }
 
-    pub fn dark() -> Self {
-        Self {
-            primary: Color::rgba(0.45, 0.58, 1.0, 1.0),
-            on_primary: Color::rgba(0.05, 0.06, 0.12, 1.0),
-            surface: Color::rgba(0.11, 0.12, 0.16, 1.0),
-            surface_alt: Color::rgba(0.07, 0.08, 0.11, 1.0),
-            border: Color::rgba(0.24, 0.26, 0.32, 1.0),
-            ink: Color::rgba(0.92, 0.93, 0.96, 1.0),
-            muted: Color::rgba(0.60, 0.63, 0.72, 1.0),
-            scrollbar: Color::rgba(0.36, 0.38, 0.46, 1.0),
-            success: Color::rgba(0.30, 0.78, 0.55, 1.0),
-            warning: Color::rgba(0.96, 0.72, 0.28, 1.0),
-            error: Color::rgba(0.94, 0.42, 0.44, 1.0),
-            info: Color::rgba(0.42, 0.68, 0.98, 1.0),
-            highlight_low: Color::rgba(1.0, 1.0, 1.0, 0.05),
-            highlight_med: Color::rgba(1.0, 1.0, 1.0, 0.10),
-            highlight_high: Color::rgba(1.0, 1.0, 1.0, 0.16),
-            radius: 10.0,
-            spacing: 8.0,
-            icon_size: 16.0,
-        }
+    pub fn base(scheme: ColorScheme) -> Self {
+        Self::for_act(Act::Opening, scheme)
     }
 }
 
-/// The active theme, read reactively: a component calling this re-runs when the theme changes.
 pub fn theme() -> AppTheme {
     use_theme::<AppTheme>()
 }
+
+thread_local! {
+    static BASE_FOLLOWER: Cell<Option<OwnerId>> = const { Cell::new(None) };
+}
+
+pub fn install_theme() {
+    register_scheme_modes();
+    if let Some(previous) = BASE_FOLLOWER.take() {
+        dispose_owner(previous);
+    }
+    let scope = detached(owner_scope);
+    effect(|| set_theme(AppTheme::base(use_scheme())));
+    BASE_FOLLOWER.set(Some(scope.id()));
+}
+
+#[telar::component]
+pub fn act_palette(act: Act, children: Children) -> Result<Box<dyn LayoutItem>, LayoutError> {
+    let palette = ScopedTheme::new(AppTheme::for_act(act, scheme_now()));
+    effect(move || palette.set(AppTheme::for_act(act, use_scheme())));
+    let provider = provide_theme(palette, move || {
+        let built = children.build()?.take_default();
+        let count = built.len();
+        let [only]: [Box<dyn LayoutItem>; 1] = built.try_into().map_err(|_| {
+            LayoutError::Engine(format!("act_palette wraps exactly one child, got {count}"))
+        })?;
+        Ok(only)
+    })?;
+    Ok(Box::new(provider))
+}
+
+#[cfg(test)]
+#[path = "theme_test.rs"]
+mod tests;

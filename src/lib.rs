@@ -1,7 +1,7 @@
 telar::app!(
     theme::AppTheme,
     {
-        telar::set_theme(theme::AppTheme::light());
+        theme::install_theme();
     },
     telar::AppConfig::default(),
     app::Root

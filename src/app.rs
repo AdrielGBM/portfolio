@@ -16,6 +16,6 @@ impl App for Root {
     }
 
     fn clear_color(&self) -> Option<Color> {
-        Some(theme().surface_alt)
+        Some(theme().background)
     }
 }
